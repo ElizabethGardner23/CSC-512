@@ -1,0 +1,29 @@
+{
+  "question": [
+    "Which of these was not a character in \"The Importance of Being Earnest\"?",
+    "Which of these characters was known as \"The Sea Hawk\"?",
+    "Which writer won Lord Byron's scary story contest?"
+  ],
+  "answer": [
+    1,
+    2,
+    3
+  ],
+  "options": [
+    ["Ernest Worthing",
+      "John Worthing",
+      "Algernon Moncrieff",
+      "Cecily Cardew"
+    ],
+    ["Peter Blood",
+      "Oliver Tressilian",
+      "Andre-Louis Moreau",
+      "Jeremy Pitt"
+    ],
+    ["Lord Byron",
+      "Doctor Polidori",
+      "Mary Shelley",
+      "Percy Shelley"
+    ]
+  ]
+}
