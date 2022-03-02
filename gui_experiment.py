@@ -8,6 +8,10 @@ from tkinter import messagebox as mb
 # from tkinter import ttk
 import json
 
+background_color = "powderblue"
+button_color = "paleturquoise"
+text_color = "midnightblue"
+
 
 class Quiz:
 
@@ -40,10 +44,10 @@ class Quiz:
     def display_result(self):
 
         # Calculate the fraction of correct answers
-        result = f"Score: {self.correct}/{self.quiz_size}"
+        result = f"You correctly answered {self.correct} out of {self.quiz_size} questions"
 
         # Shows a message box to display the result
-        mb.showinfo("Result", f"{result}")
+        mb.showinfo("Score", f"{result}")
 
     # This method checks the answer to a question
     def check_answer(self, question_num):
@@ -72,14 +76,14 @@ class Quiz:
     def buttons(self):
 
         next_button = Button(root, text="Next", command=self.next_button,
-                             width=20, bg="light green", fg="green", font=("ariel", 12, "bold"))
+                             width=20, bg=button_color, fg=text_color, font=("ariel", 12, "bold"))
 
-        next_button.place(x=300, y=380)
+        next_button.place(x=360, y=380)
 
         quit_button = Button(root, text="Quit", command=root.destroy,
-                             width=5, bg="light blue", fg="blue", font=("ariel", 12, " bold"))
+                             width=5, bg=button_color, fg=text_color, font=("ariel", 12, " bold"))
 
-        quit_button.place(x=700, y=50)
+        quit_button.place(x=825, y=15)
 
     # This method prepares the set of options for each question
     def display_options(self):
@@ -95,7 +99,7 @@ class Quiz:
     # This method displays the current question on the screen
     def display_question(self):
 
-        question_num = Label(root, text=question[self.question_num], width=60,
+        question_num = Label(root, text=question[self.question_num], width=60, bg=background_color, fg=text_color,
                              font=('ariel', 16, 'bold'), anchor='w')
 
         question_num.place(x=70, y=100)
@@ -109,7 +113,8 @@ class Quiz:
 
         while len(question_list) < 4:
             radio_button = Radiobutton(root, text=" ", variable=self.option_selected,
-                                       value=len(question_list) + 1, indicator=0, font=("ariel", 14))
+                                       value=len(question_list) + 1, indicator=0, font=("ariel", 14),
+                                       background=button_color, foreground=text_color)
 
             question_list.append(radio_button)
 
@@ -124,9 +129,9 @@ root = Tk()
 
 root.geometry("900x450")
 
-root.title("Hello World")
+root.title("Quiz")
 
-root.configure(background="light blue")
+root.configure(background=background_color)
 
 with open('q_and_a.json') as f:
     q_and_a = json.load(f)
