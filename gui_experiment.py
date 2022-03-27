@@ -1,11 +1,12 @@
 __author__ = "Elizabeth Gardner"
-__date__ = "23 February 2022"
+__date__ = "27 March 2022"
 # CSC 512: Professional Practice
 # GUI Experiment
 
+import tkinter as tk
 from tkinter import *
 from tkinter import messagebox as mb
-# from tkinter import ttk
+from tkinter import ttk
 import json
 
 background_color = "powderblue"
@@ -78,12 +79,14 @@ class Quiz:
         next_button = Button(root, text="Next", command=self.next_button,
                              width=20, bg=button_color, fg=text_color, font=("ariel", 12, "bold"))
 
-        next_button.place(x=360, y=380)
+        # next_button.place(x=360, y=380)
+        next_button.grid(row=7, columnspan=2, sticky=tk.EW, padx=10, pady=10)
 
         quit_button = Button(root, text="Quit", command=root.destroy,
                              width=5, bg=button_color, fg=text_color, font=("ariel", 12, " bold"))
 
-        quit_button.place(x=825, y=15)
+        # quit_button.place(x=825, y=15)
+        quit_button.grid(column=1, row=0, sticky=tk.NE, padx=10, pady=10)
 
     # This method prepares the set of options for each question
     def display_options(self):
@@ -100,9 +103,10 @@ class Quiz:
     def display_question(self):
 
         question_num = Label(root, text=question[self.question_num], width=60, bg=background_color, fg=text_color,
-                             font=('ariel', 16, 'bold'), anchor='w')
+                             font=('ariel', 16, 'bold'))
 
-        question_num.place(x=70, y=100)
+        # question_num.place(x=70, y=100)
+        question_num.grid(row=1, columnspan=2, sticky=tk.EW, padx=10, pady=10)
 
     # This method creates a radio button associated with each option
     def radio_buttons(self):
@@ -118,7 +122,8 @@ class Quiz:
 
             question_list.append(radio_button)
 
-            radio_button.place(x=100, y=y_pos)
+            # radio_button.place(x=100, y=y_pos)
+            radio_button.grid(row=len(question_list)+1, columnspan=2, sticky=tk.EW, padx=10, ipady=10)
 
             y_pos += 40
 
@@ -128,6 +133,18 @@ class Quiz:
 root = Tk()
 
 root.geometry("900x450")
+
+# Configure the grid
+root.columnconfigure(0, weight=1)
+root.columnconfigure(1, weight=1)
+
+root.rowconfigure(0, weight=10)
+root.rowconfigure(1, weight=10)
+root.rowconfigure(2, weight=1)
+root.rowconfigure(3, weight=1)
+root.rowconfigure(4, weight=1)
+root.rowconfigure(5, weight=1)
+root.rowconfigure(6, weight=10)
 
 root.title("Quiz")
 
@@ -140,9 +157,46 @@ question = (q_and_a['question'])
 options = (q_and_a['options'])
 answer = (q_and_a['answer'])
 
+input_name = tk.StringVar(root, "")
+
+
+def create_title():
+    title_label = Label(root, text="Take a Quiz!", bg=background_color, fg=text_color, font=('ariel', 16, 'bold'))
+    title_label.grid(row=1, columnspan=2, sticky=tk.EW, padx=5, pady=5)
+
+
+def create_name_field():
+
+    name_label = Label(root, text="Name", bg=background_color, fg=text_color, font=('ariel', 14))
+    name_label.grid(column=0, row=2, sticky=tk.E, padx=5, pady=5)
+
+    name_entry = ttk.Entry(root, textvariable=input_name)
+    name_entry.grid(column=1, row=2, sticky=tk.W, padx=5, pady=5)
+
+
+def login():
+
+    user_name = str(input_name.get())
+    if user_name != "":
+        Quiz()
+
+
+def create_start_button():
+
+    start_button = Button(root, text="Start Quiz", command=login, bg=button_color, fg=text_color,
+                          font=("ariel", 12, "bold"))
+    start_button.grid(row=7, columnspan=2, sticky=tk.EW, padx=10, pady=10)
+
+
+def create_login():
+
+    create_title()
+    create_name_field()
+    create_start_button()
+
 
 def main():
-    quiz = Quiz()
+    create_login()
 
     # frame = ttk.Frame(root, padding=250)
     # frame.grid()
