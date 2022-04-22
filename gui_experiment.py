@@ -1,8 +1,8 @@
 __author__ = "Elizabeth Gardner"
-__date__ = "27 March 2022"
+__date__ = "13 April 2022"
 # CSC 512: Professional Practice
 # GUI Experiment
-
+import ast
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox as mb
@@ -47,6 +47,9 @@ class Quiz:
         # Calculate the fraction of correct answers
         result = f"You correctly answered {self.correct} out of {self.quiz_size} questions"
 
+        global score
+        score = self.correct
+
         # Shows a message box to display the result
         mb.showinfo("Score", f"{result}")
 
@@ -55,6 +58,17 @@ class Quiz:
 
         if self.option_selected.get() == answer[question_num]:
             return True
+
+    # This method records the user's score at the end of the game
+    # def record_score(self):
+    #
+    #     local_file = open(r"scores.txt", "r+")
+    #     past_scores_string = local_file.read()
+    #     print(type(past_scores_string))
+    #     past_scores = ast.literal_eval(past_scores_string)
+    #     print(type(past_scores))
+    #
+    #     local_file.close()
 
     # This method checks the answer to a question after the player moves to the next question,
     # increments the number of correct answers if the answer was correct, and either displays
@@ -132,7 +146,9 @@ class Quiz:
 
 root = Tk()
 
-root.geometry("900x450")
+window_width = 900
+window_height = 450
+root.geometry(f"{window_width}x{window_height}")
 
 # Configure the grid
 root.columnconfigure(0, weight=1)
@@ -176,6 +192,7 @@ def create_name_field():
 
 def login():
 
+    global user_name
     user_name = str(input_name.get())
     if user_name != "":
         Quiz()
@@ -195,6 +212,31 @@ def create_login():
     create_start_button()
 
 
+def record_score():
+
+    local_file = open(r"scores.txt", "r")
+    past_scores_string = local_file.read()
+    local_file.close()
+    print(type(past_scores_string))
+    past_scores = ast.literal_eval(past_scores_string)
+    print(type(past_scores))
+
+    if user_name in past_scores.keys():
+        if len(past_scores[user_name]) > 10:
+            past_scores[user_name][0].remove()
+        past_scores[user_name].append(score)
+    else:
+        past_scores[user_name] = [score]
+
+    local_file = open(r"scores.txt", "w")
+    local_file.write(str(past_scores))
+
+    print(user_name)
+    print(score)
+
+    local_file.close()
+
+
 def main():
     create_login()
 
@@ -204,6 +246,8 @@ def main():
     # ttk.Button(frame, text="Quit", command=root.destroy).grid(column=1, row=0)
 
     root.mainloop()
+
+    record_score()
 
     # print("Hello world")
 
