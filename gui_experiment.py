@@ -1,5 +1,5 @@
 __author__ = "Elizabeth Gardner"
-__date__ = "13 April 2022"
+__date__ = "22 April 2022"
 # CSC 512: Professional Practice
 # GUI Experiment
 import ast
@@ -41,14 +41,40 @@ class Quiz:
         self.correct = 0
 
     # This method counts the number of correct and wrong answers
-    # and displays the result in a message box at the end of the game
+    # displays the result in a message box at the end of the game
+    # and records the user's score in scores.txt
     def display_result(self):
 
         # Calculate the fraction of correct answers
-        result = f"You correctly answered {self.correct} out of {self.quiz_size} questions"
+        result = f"You correctly answered {self.correct} out of {self.quiz_size} questions."
 
-        global score
-        score = self.correct
+        local_file = open(r"scores.txt", "r")
+        past_scores_string = local_file.read()
+        local_file.close()
+        # print(type(past_scores_string))
+        past_scores = ast.literal_eval(past_scores_string)
+        # print(type(past_scores))
+
+        if user_name in past_scores.keys():
+            if len(past_scores[user_name]) >= 10:
+                past_scores[user_name].pop(0)
+            past_scores[user_name].append(self.correct)
+
+            result = f"{result} \n"
+            if past_scores[user_name][-2] < self.correct:
+                result = f"{result}Congratulations! "
+        else:
+            past_scores[user_name] = [self.correct]
+
+        result = f"{result}Your previous score was {past_scores[user_name][-2]}."
+
+        local_file = open(r"scores.txt", "w")
+        local_file.write(str(past_scores))
+
+        # print(user_name)
+        # print(score)
+
+        local_file.close()
 
         # Shows a message box to display the result
         mb.showinfo("Score", f"{result}")
@@ -59,20 +85,6 @@ class Quiz:
         if self.option_selected.get() == answer[question_num]:
             return True
 
-    # This method records the user's score at the end of the game
-    # def record_score(self):
-    #
-    #     local_file = open(r"scores.txt", "r+")
-    #     past_scores_string = local_file.read()
-    #     print(type(past_scores_string))
-    #     past_scores = ast.literal_eval(past_scores_string)
-    #     print(type(past_scores))
-    #
-    #     local_file.close()
-
-    # This method checks the answer to a question after the player moves to the next question,
-    # increments the number of correct answers if the answer was correct, and either displays
-    # the next question or (if the last question had been answered) displays the final score
     def next_button(self):
 
         if self.check_answer(self.question_num):
@@ -212,44 +224,10 @@ def create_login():
     create_start_button()
 
 
-def record_score():
-
-    local_file = open(r"scores.txt", "r")
-    past_scores_string = local_file.read()
-    local_file.close()
-    print(type(past_scores_string))
-    past_scores = ast.literal_eval(past_scores_string)
-    print(type(past_scores))
-
-    if user_name in past_scores.keys():
-        if len(past_scores[user_name]) > 10:
-            past_scores[user_name][0].remove()
-        past_scores[user_name].append(score)
-    else:
-        past_scores[user_name] = [score]
-
-    local_file = open(r"scores.txt", "w")
-    local_file.write(str(past_scores))
-
-    print(user_name)
-    print(score)
-
-    local_file.close()
-
-
 def main():
     create_login()
 
-    # frame = ttk.Frame(root, padding=250)
-    # frame.grid()
-    # ttk.Label(frame, text="Hello World").grid(column=0, row=0)
-    # ttk.Button(frame, text="Quit", command=root.destroy).grid(column=1, row=0)
-
     root.mainloop()
-
-    record_score()
-
-    # print("Hello world")
 
 
 if __name__ == "__main__":
